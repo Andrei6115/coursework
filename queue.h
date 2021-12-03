@@ -9,4 +9,6 @@ typedef struct s_queue
 } t_queue;
 
 void	queueMenu(t_queue	**queue);
+void	queueCleaner(t_queue **start_list);
+void	queuePrint(t_queue **queue);
 #endif

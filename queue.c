@@ -27,14 +27,13 @@ void	queuePrint(t_queue **queue)
 {
 	t_queue	*tmp;
 
+	if (!*queue)
+		return ;
 	tmp = *queue;
-	if (!tmp)
-		printf("Queue empty\n");
-	else
-		printf("---\n");
+	printf("---\n");
 	while (tmp)
 	{
-		sentencePrint(&(tmp->data));
+		sentenceP(&(tmp->data), tmp->data);
 		tmp = tmp->next;
 	}
 }
@@ -58,6 +57,7 @@ t_queue  *queueAddEl()
 void	queuePush(t_queue **begin_list)
 {
 	t_queue	*current;
+	t_queue *tmp;
 
 	current = *begin_list;
 	if (!current)
@@ -65,10 +65,10 @@ void	queuePush(t_queue **begin_list)
 		*begin_list = queueAddEl();
 		return ;
 	}
-	while (current->next)
-		current = current->next;
-	current->next = queueAddEl();
-	current->next->prev = current;
+	tmp = queueAddEl();
+	tmp->next = current;
+	current->prev = tmp;
+	(*begin_list) = tmp;
 }
 
 t_queue	*queueLast(t_queue *begin_list)
@@ -132,7 +132,7 @@ void	queueMenu(t_queue	**queue)
 		case 3:
 		if (*queue)
 		{
-			sentencePrint(&(*queue)->data);
+			sentenceP(&(*queue)->data, (*queue)->data);
 		}
 		else
 			printf("Queue empty\n");
@@ -150,7 +150,7 @@ void	queueMenu(t_queue	**queue)
 		if (*queue)
 		{
 			taked = last;
-			sentencePrint(&(taked->data));
+			sentenceP(&(taked->data), taked->data);
 			queueDeleteEl(&last);
 			
 			taked = NULL;

@@ -2,8 +2,6 @@
 # define HEADER_H
 # include <stdio.h>
 # include <stdlib.h>
-# include "sentence.h"
-# include "get_next_line.h"
 
 int	startWorkWithStruct(char *structName);
 char	**ft_split(char const *s, char c);

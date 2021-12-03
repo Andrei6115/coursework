@@ -7,8 +7,7 @@ typedef struct s_sentence
 	struct s_sentence	*next;
 } t_sentence;
 
-void sentenceMenu(t_sentence **sentence);
+void 	sentenceMenu(t_sentence **sentence);
 void	sentenceCleaner(t_sentence **begin);
-void	sentencePrint(t_sentence **sentence);
-void	sentenceAdd(t_sentence **sentence, const char *str);
+void	sentenceP(t_sentence **sentence, t_sentence *cursor);
 #endif

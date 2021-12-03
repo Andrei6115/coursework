@@ -1,4 +1,4 @@
-#include "queue.h"
+#include "sequence.h"
 
 
 int main(int argc, char const *argv[])
@@ -7,8 +7,9 @@ int main(int argc, char const *argv[])
 	s = NULL;
 	t_queue *q;
 	q = NULL;
-
+	system("clear");
 	//sentenceMenu(&s);
-	queueMenu(&q);
+	//queueMenu(&q);
+	sequenceMenu();
 	return 0;
 }

@@ -8,8 +8,8 @@ int main(int argc, char const *argv[])
 	t_queue *q;
 	q = NULL;
 	system("clear");
-	//sentenceMenu(&s);
+	sentenceMenu(&s);
 	//queueMenu(&q);
-	sequenceMenu();
+	//sequenceMenu();
 	return 0;
 }

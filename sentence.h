@@ -5,6 +5,7 @@ typedef struct s_sentence
 {
 	char				*word;
 	struct s_sentence	*next;
+	struct s_sentence	*prev;
 } t_sentence;
 
 void 	sentenceMenu(t_sentence **sentence);

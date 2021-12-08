@@ -102,174 +102,401 @@ void	sentenceP(t_sentence **sentence, t_sentence *cursor)
 	printf("\n");
 }
 
+void	delete_after_pointer(t_sentence **list)
+{
+	t_sentence	*temp;
+
+	if (!(*list)->next)
+		return;
+	temp = (*list)->next;
+	if (temp->next)
+	{
+		(*list)->next = temp->next;
+		temp->next->prev = *list;
+	}
+	else
+	{
+		(*list)->next = NULL;
+	}
+	free(temp->word);
+	free(temp);
+}
+
+void	delete_before_pointer(t_sentence **list)
+{
+	t_sentence	*temp;
+
+	if (!(*list)->prev)
+		return;
+	temp = (*list)->prev;
+	if (temp->prev)
+	{
+		(*list)->prev = temp->prev;
+		temp->prev->next = *list;
+	}
+	else
+	{
+		(*list)->prev = NULL;
+	}
+	free(temp->word);
+	free(temp);
+}
+
+void	create_after_pointer(t_sentence **list, char *data)
+{
+	t_sentence	*temp;
+
+	if (!list)
+	{
+		printf("DELETE NULL POINTER!\n");
+		return ;
+	}
+	temp = ft_lstnew(data);
+	if (!*list)
+		*list = temp;
+	else
+	{
+		if ((*list)->next)
+		{
+			temp->next = (*list)->next;
+			temp->next->prev = temp;
+			(*list)->next = temp;
+			temp->prev = (*list);
+		}
+		else
+		{
+			(*list)->next = temp;
+			temp->prev = (*list);
+		}
+	}
+}
+
+void	create_before_pointer(t_sentence **list, char *data)
+{
+	t_sentence	*temp;
+
+	if (!list)
+	{
+		printf("DELETE NULL POINTER!\n");
+		return ;
+	}
+	temp = ft_lstnew(data);
+	if (!temp)
+		return ;
+	if (!*list)
+		*list = temp;
+	else
+	{
+		if ((*list)->prev)
+		{
+			temp->prev = (*list)->prev;
+			temp->prev->next = temp;
+			(*list)->prev = temp;
+			temp->next = (*list);
+		}
+		else
+		{
+			(*list)->prev = temp;
+			temp->next = (*list);
+		}
+	}
+}
+
 void	sentenceMenu(t_sentence **sentence)
 {
 	int			flag;
 	char		str[100];
 	t_sentence	*cursor;
 	t_sentence	*tmp;
+	char		word[100];
 	
 	if (!startWorkWithStruct("Sentence"))
 		return ;
 	flag = 1;
+	tmp = NULL;
 	cursor = *sentence;
 	while (flag)
 	{
 		
 		sentenceP(sentence, cursor);
 		//printf("1. Cleaner\n2. Sentence clean?\n3. Add sentence\n4. Uppdate sentence\n0. Exit\n");
-		printf("1. Cleaner\n2. Sentence clean?\n3. Cursor to start\n4. Cursor in end?\n5. Cursor next\n6. View next\n7. Delete next\n8. Take element\n9. Change next\n10. Add next\n11. Print\n0. Exit\n");
-
+		//printf("1. Cleaner\n2. Sentence clean?\n3. Cursor to start\n4. Cursor in end?\n5. Cursor next\n6. View next\n7. Delete next\n8. Take element\n9. Change next\n10. Add next\n11. Print\n0. Exit\n");
+		printf("1. Cleaner\n2. Sentence clean?\n3. Cursor to start\n4. Cursor to end\n5. Cursor at start?\n6. Cursor at end?\n7. Cursor next\n8. Cursor prev\n9. View after pointer\n10.View before pointer\n11.Delete after pointer\n12.Delete before pointer\n13.Take after pointer\n14.Take before pointer\n15.Change after pointer\n16.Change before pointer\n17.Create after ponter\n18.Create before pointer\n19.Print list\n20.Exit\n\tU entered:");
 		scanf("%d", &flag);
 		printf("\n");
 		system("clear");
 		switch (flag)
 		{
 		case 1:
-		if (*sentence)
-			sentenceCleaner(sentence);
-		else
-			printf("Sentence clean\n");
+			if (*sentence)
+			{
+				sentenceCleaner(sentence);
+				*sentence = NULL;
+				cursor = NULL;
+			}
+			else
+			{
+				printf("List clear\n");
+			}
 			break;
 		case 2:
-			if (*sentence)
-				printf("Sentence not clean\n");
-			else 
-				printf("Sentence clean\n");
+			if (*sentence == NULL)
+				printf("List empty\n");
+			else
+				printf("List not empty\n");
 			break;
 		case 3:
-			if (*sentence)
+			if(*sentence)
 			{
 				cursor = *sentence;
 			}
 			else
 			{
-				printf("Sentence clean\n");
+				printf("List clear\n");
 			}
 			break;
 		case 4:
-			if (*sentence)
+			if (!(*sentence))
 			{
-				if (cursor->next)
-					printf("Cursor not in end\n");
-				else
-					printf("Cursor in end\n");
+				printf("List clear\n");
 			}
 			else
 			{
-				printf("Sentence clean\n");
+				while (cursor->next)
+					cursor = cursor->next;
 			}
 			break;
 		case 5:
-			if (*sentence)
+			if (!(*sentence))
 			{
-				if (cursor->next)
-					cursor = cursor->next;
+				printf("List clear\n");
+			}	
+			else if (!cursor->prev)
+					printf("Pointer in start\n");
 				else
-					printf("Cursor in end\n");
-			}
-			else
-			{
-				printf("Sentence clean\n");
-			}
+					printf("Pointer not in start\n");
 			break;
 		case 6:
-			if (*sentence)
+			if (!(*sentence))
 			{
-				if (cursor->next)
-				{
-						printf("%s\n", cursor->next->word);
-				}
+				printf("List clear\n");
+			}
+			else if (!cursor->next)
+					printf("Pointer in end\n");
 				else
-					printf("Cursor in end\n");
-			}
-			else
-			{
-				printf("Sentence clean\n");
-			}
+					printf("Pointer not in end\n");
 			break;
-		case 7:
-			if (*sentence)
+		case 7:	
+			if (!(*sentence))
 			{
-				if (cursor->next)
-				{
-					tmp = cursor->next;
-					cursor->next = tmp->next;
-					free(tmp);
-					tmp = NULL;
-				}
+				printf("List clear\n");
+			}
+			else if (cursor->next)
+				cursor=cursor->next;
 				else
-					printf("Cursor in end\n");
-			}
-			else
-			{
-				printf("Sentence clean\n");
-			}
+					printf("No el\n");
 			break;
 		case 8:
-			if (*sentence)
+			if (!(*sentence))
 			{
-				if (cursor->next)
-				{
-					tmp = cursor->next;
-					cursor->next = tmp->next;
-					printf("Taked: %s", tmp->word);
-					free(tmp);
-					tmp = NULL;
-				}
-				else
-					printf("Cursor in end\n");
-			}
+				printf("List clear\n");
+				
+			}	
 			else
-			{
-				printf("Sentence clean\n");
-			}
+				if (cursor->prev)
+					cursor=cursor->prev;
+				else
+					printf("no el\n");
 			break;
 		case 9:
-			if (*sentence)
+			if (!(*sentence))
 			{
-				if (cursor->next)
-				{
-					printf("Enter word:");
-					scanf("%s", cursor->next->word);
-				}
-				else
-					printf("Cursor in end\n");
-			}
+				printf("List clear");
+			}	
+			else if (cursor->next)
+				printf("%s", cursor->prev->word);
 			else
-			{
-				printf("Sentence clean\n");
-			}
+				printf("No element");
+				printf("\n");
 			break;
 		case 10:
-			if (!cursor)
+			if (!(*sentence))
 			{
-				printf("Enter word:");
-				scanf("%s", str);
-				ft_lstadd_back(sentence, ft_lstnew(str));
-				cursor = *sentence;
-			}
+				printf("List clear");
+			}	
+			else if (cursor->prev)
+				printf("%s", cursor->prev->word);
 			else
-			{
-				printf("Enter word:");
-				scanf("%s", str);
-				ft_lstadd_back(&cursor, ft_lstnew(str));
-			}
+				printf("No element");
+				printf("\n");
 			break;
 		case 11:
-			if (*sentence)
+			if (!(*sentence))
 			{
-				sentenceP(sentence, cursor);
+				printf("List clear\n");
+			}	
+			else
+			{
+				delete_after_pointer(&cursor);
+				
+			}
+			break;
+		case 12:
+			if (!(*sentence))
+			{
+				printf("List clear\n");
+			}	
+			else
+			{
+				delete_before_pointer(&cursor);
+				(*sentence) = cursor;
+				while ((*sentence)->prev)
+					(*sentence) = (*sentence)->prev;
+			}
+			break;
+		case 13:
+			if (tmp)
+			{
+				free(tmp->word);
+				free(tmp);
+				tmp = NULL;
+			}
+			if (!(*sentence))
+			{
+				printf("List clear\n");
+			}	
+			else if(cursor->next)
+			{
+				tmp = cursor->next;
+				if (tmp->next)
+				{
+					cursor->next = tmp->next;
+					tmp->next->prev = cursor;
+				}
+				else
+				{
+					cursor->next = NULL;
+				}
+				printf("Taked el: ");
+				printf("%s", tmp->word);
+				printf("\n");
 			}
 			else
 			{
-				printf("Sentence clean\n");
+				printf("No element\n");
 			}
 			break;
-		case 0:
-			return ;
+		case 14:
+			if (tmp)
+			{
+				if (tmp->word)
+					free(tmp->word);
+				free(tmp);
+				tmp = NULL;
+			}
+			if (!(*sentence))
+			{
+				printf("List clear\n");
+			}	
+			else if (cursor->prev)
+			{
+				tmp = (cursor)->prev;
+				if (tmp->prev)
+				{
+					cursor->prev = tmp->prev;
+					tmp->prev->next = cursor;
+				}
+				else
+				{
+					cursor->prev = NULL;
+				}
+				printf("Taked el: ");
+				printf("%s", tmp->word);
+				printf("\n");
+			}
+			else
+			{
+				printf("No element\n");
+			}
+			break;
+		case 15:
+			if (!(*sentence))
+			{
+				printf("List clear\n");
+			}	
+			else if (cursor->next)
+			{
+				printf("Enter data for el:");
+				scanf("%s", (cursor->next->word));
+				printf("\n");
+				//cursor->next->word = word;
+			}
+			else
+			{
+				printf("no elem\n");
+			}
+			break;
+		case 16:
+			if (!(*sentence))
+			{
+				printf("List clear\n");
+			}	
+			else if (cursor->prev)
+			{
+				printf("Enter data for el:");
+				scanf("%s", (cursor->prev->word));
+				printf("\n");
+				//list->prev->data = data;
+			}
+			else
+			{
+				printf("No elem\n");
+			}
+			break;
+		case 17:
+			printf("Enter data for el:");
+			scanf("%s", word);
+			printf("\n");
+			create_after_pointer(&cursor, word);
+			if(!cursor)
+			{
+				printf("memmory not alocate\n");
+			}
+			else
+			{
+				(*sentence) = cursor;
+				while ((*sentence)->prev)
+				{
+					(*sentence)=(*sentence)->prev;
+				}
+			}
+			break;
+		case 18:
+			printf("Enter data for el:");
+			scanf("%s", word);
+			printf("\n");
+			create_before_pointer(&cursor, word);
+			if(!(*sentence))
+			{
+				printf("memmory not alocate\n");
+			}
+			else
+			{
+				(*sentence) = cursor;
+				while ((*sentence)->prev)
+				{
+					(*sentence)=(*sentence)->prev;
+				}
+			}
+			break;
+		case 19:
+			//print(start_list, list);
+			break;
+		case 20:
+			sentenceCleaner(sentence);
+			return ;	
 		default:
-			printf("Error\n");
+			printf("ERROR 404\n");
 			break;
 		}
 	}

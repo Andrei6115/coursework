@@ -12,7 +12,7 @@ t_sentence	*ft_lstnew(char *word)
 		return (NULL);
 	}
 	ret->word = malloc(strlen(word));
-	if (!ret)
+	if (!ret->word)
 	{
 		printf("MEM ERROR\n");
 		return (NULL);
@@ -20,6 +20,7 @@ t_sentence	*ft_lstnew(char *word)
 	strcpy(ret->word, word);
 	//ret->word = ;
 	ret->next = NULL;
+	ret->prev = NULL;
 	return (ret);
 }
 
@@ -181,8 +182,6 @@ void	create_before_pointer(t_sentence **list, char *data)
 		return ;
 	}
 	temp = ft_lstnew(data);
-	if (!temp)
-		return ;
 	if (!*list)
 		*list = temp;
 	else
@@ -231,8 +230,8 @@ void	sentenceMenu(t_sentence **sentence)
 			if (*sentence)
 			{
 				sentenceCleaner(sentence);
-				*sentence = NULL;
-				cursor = NULL;
+				(*sentence) = NULL;
+				cursor = *sentence;
 			}
 			else
 			{
@@ -410,6 +409,11 @@ void	sentenceMenu(t_sentence **sentence)
 				{
 					cursor->prev = NULL;
 				}
+				(*sentence) = cursor;
+				while ((*sentence)->prev)
+				{
+					(*sentence)=(*sentence)->prev;
+				}
 				printf("Taked el: ");
 				printf("%s", tmp->word);
 				printf("\n");
@@ -458,17 +462,10 @@ void	sentenceMenu(t_sentence **sentence)
 			scanf("%s", word);
 			printf("\n");
 			create_after_pointer(&cursor, word);
-			if(!cursor)
+			(*sentence) = cursor;
+			while ((*sentence)->prev)
 			{
-				printf("memmory not alocate\n");
-			}
-			else
-			{
-				(*sentence) = cursor;
-				while ((*sentence)->prev)
-				{
-					(*sentence)=(*sentence)->prev;
-				}
+				(*sentence)=(*sentence)->prev;
 			}
 			break;
 		case 18:
@@ -476,17 +473,10 @@ void	sentenceMenu(t_sentence **sentence)
 			scanf("%s", word);
 			printf("\n");
 			create_before_pointer(&cursor, word);
-			if(!(*sentence))
+			(*sentence) = cursor;
+			while ((*sentence)->prev)
 			{
-				printf("memmory not alocate\n");
-			}
-			else
-			{
-				(*sentence) = cursor;
-				while ((*sentence)->prev)
-				{
-					(*sentence)=(*sentence)->prev;
-				}
+				(*sentence)=(*sentence)->prev;
 			}
 			break;
 		case 19:
@@ -494,6 +484,8 @@ void	sentenceMenu(t_sentence **sentence)
 			break;
 		case 20:
 			sentenceCleaner(sentence);
+			//*sentence = NULL;
+			cursor = NULL;
 			return ;	
 		default:
 			printf("ERROR 404\n");

@@ -9,7 +9,7 @@ void	queueCleaner(t_queue **start_list)
 	}
 	if (!(*start_list))
 	{
-		printf("Queue empty\n");
+		//printf("Queue empty\n");
 		return ;
 	}
 	while ((*start_list)->next)

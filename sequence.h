@@ -1,5 +1,5 @@
 #ifndef SEQUENCE_H
-# define SEQUNCE_H
+# define SEQUENCE_H
 # include "queue.h"
 
 typedef struct s_sequence

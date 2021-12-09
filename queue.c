@@ -154,7 +154,7 @@ void	queueMenu(t_queue	**queue)
 		case 3:
 		if (*queue)
 		{
-			sentenceP(&(*queue)->data, (*queue)->data);
+			sentenceP(&(last)->data, (last)->data);
 		}
 		else
 			printf("Queue empty\n");
@@ -187,7 +187,7 @@ void	queueMenu(t_queue	**queue)
 		case 6:
 		if (*queue)
 		{
-			sentenceMenu(&(*queue)->data);
+			sentenceMenu(&(last)->data);
 		}
 		else
 			printf("Queue empty\n");
@@ -199,6 +199,7 @@ void	queueMenu(t_queue	**queue)
 				break;
 			}
 			queuePush(queue);
+			sentenceMenu(&(*queue)->data);
 			last = queueLast(*queue);
 			size++;
 			break;

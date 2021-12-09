@@ -1,6 +1,9 @@
 #ifndef QUEUE_H
 # define QUEUE_H
 # include "sentence.h"
+# ifndef MAXSIZEQUEUE
+#  define MAXSIZEQUEUE 5
+# endif
 typedef struct s_queue
 {
 	struct s_sentence	*data;

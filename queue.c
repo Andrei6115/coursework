@@ -80,9 +80,23 @@ t_queue	*queueLast(t_queue *begin_list)
 	return (begin_list);
 }
 
+int	ft_list_size(t_queue *begin_list)
+{
+	int		count;
+
+	count = 0;
+	while (begin_list)
+	{
+		count++;
+		begin_list = begin_list->next;
+	}
+	return (count);
+}
+
 void	queueDeleteEl(t_queue **last)
 {
-		if (!last)
+	t_queue *temp;
+	if (!last)
 	{
 		printf("NULL POINTER\n");
 		return ;
@@ -92,17 +106,22 @@ void	queueDeleteEl(t_queue **last)
 		printf("Queue empty\n");
 		return ;
 	}
-	sentenceCleaner(&(*last)->data);
-	if ((*last)->prev)
-		(*last)->prev->next = NULL;
-	free(*last);
-	*last = NULL;
+	temp = (*last);
+	sentenceCleaner(&temp->data);
+	if (temp->prev) {
+		(*last) = (*last)->prev;
+		(*last)->next = NULL;
+	}
+	else
+		(*last) = NULL;
+	free(temp);
 }
 
 void	queueMenu(t_queue	**queue)
 {
 	int		flag;
 	char	*str;
+	int		size;
 	t_queue	*last;
 	t_queue	*taked;
 	
@@ -110,6 +129,7 @@ void	queueMenu(t_queue	**queue)
 		return ;
 	last = queueLast(*queue);
 	flag = 1;
+	size = ft_list_size(*queue);
 	while (flag)
 	{
 		queuePrint(queue);
@@ -121,7 +141,9 @@ void	queueMenu(t_queue	**queue)
 		{
 		case 1:
 		if (*queue)
-			queueCleaner(queue);
+			if (!*queue)
+				queueCleaner(queue);
+			size = 0;
 			break;
 		case 2:
 		if (*queue)
@@ -141,7 +163,11 @@ void	queueMenu(t_queue	**queue)
 		if (*queue)
 		{
 			queueDeleteEl(&last);
-			last = queueLast(*queue);
+			size--;
+			(*queue) = last;
+			if (*queue)
+				while ((*queue)->prev)
+					(*queue) = (*queue)->prev;
 		}
 		else
 			printf("Queue empty\n");
@@ -152,7 +178,7 @@ void	queueMenu(t_queue	**queue)
 			taked = last;
 			sentenceP(&(taked->data), taked->data);
 			queueDeleteEl(&last);
-			
+			size--;
 			taked = NULL;
 		}
 		else
@@ -167,8 +193,14 @@ void	queueMenu(t_queue	**queue)
 			printf("Queue empty\n");
 			break;
 		case 7:
+			if (size == MAXSIZEQUEUE)
+			{
+				printf("%d el max\n", MAXSIZEQUEUE);
+				break;
+			}
 			queuePush(queue);
 			last = queueLast(*queue);
+			size++;
 			break;
 		case 8:
 		if (*queue)

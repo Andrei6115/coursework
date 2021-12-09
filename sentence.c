@@ -90,7 +90,10 @@ void	sentenceP(t_sentence **sentence, t_sentence *cursor)
 
 	list = *sentence;
 	if (!list)
-		printf("%p", list);
+	{
+		printf("%p\n", list);
+		return;
+	}
 	while (list)
 	{
 		if (*sentence != list)
@@ -483,9 +486,9 @@ void	sentenceMenu(t_sentence **sentence)
 			//print(start_list, list);
 			break;
 		case 20:
-			sentenceCleaner(sentence);
+			//sentenceCleaner(sentence);
 			//*sentence = NULL;
-			cursor = NULL;
+			//cursor = NULL;
 			return ;	
 		default:
 			printf("ERROR 404\n");
